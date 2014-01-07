@@ -4,7 +4,7 @@
 # BrainFuck interpreter.
 class Bf
   def initialize
-    @memory = [ 0 ] * 30_000
+    @memory = [0] * 30_000
     @b = []
     @p = 0
     @x = 0
@@ -22,31 +22,31 @@ class Bf
 
   # '+'
   def i
-    @memory[ @p ] += 1 unless @j
+    @memory[@p] += 1 unless @j
   end
 
   # '-'
   def d
-    @memory[ @p ] -= 1 unless @j
+    @memory[@p] -= 1 unless @j
   end
 
   # '.'
   def o
-    print @memory[ @p ].chr unless @j
+    print @memory[@p].chr unless @j
   end
 
   # ','
   def n
-    @memory[ @p ] = $stdin.getc unless @j
+    @memory[@p] = $stdin.getc unless @j
   end
 
   # '['
   def j
     @x += 1
-    @b[ @x ] = $ip - 1
+    @b[@x] = $ip - 1
     if @j
       return
-    elsif  @memory[ @p ] == 0
+    elsif  @memory[@p] == 0
       @j = @x
     end
   end
@@ -55,8 +55,8 @@ class Bf
   def e
     if @j == @x
       @j = nil
-    elsif @memory[ @p ] != 0
-      $ip = @b[ @x ]
+    elsif @memory[@p] != 0
+      $ip = @b[@x]
     end
     @x -= 1
   end
@@ -69,6 +69,6 @@ $ip = 0
 p = $<.readlines.join.tr( '^><+\-.,[]', '' ).tr( '><+\-.,[]', 'rlidonje' )
 
 while $ip < p.size
-  bf.send p[ $ip ].chr
+  bf.send p[$ip].chr
   $ip += 1
 end
