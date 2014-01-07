@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 
+require 'English'
+
 # BrainFuck interpreter.
 class Bf
   def initialize
@@ -66,7 +68,8 @@ bf = Bf.new
 
 $ip = 0
 
-p = $<.readlines.join.tr('^><+\-.,[]', '').tr('><+\-.,[]', 'rlidonje')
+p = $DEFAULT_INPUT.readlines.join
+  .tr('^><+\-.,[]', '').tr('><+\-.,[]', 'rlidonje')
 
 while $ip < p.size
   bf.send p[$ip].chr
