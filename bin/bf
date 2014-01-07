@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 
+# BrainFuck interpreter.
 class Bf
   def initialize
     @memory = [ 0 ] * 30000
