@@ -3,65 +3,59 @@
 
 class Bf
   def initialize
-    # メモリ
-    @a = [ 0 ] * 30000
-    # '[' のあるアドレス - 1
+    @memory = [ 0 ] * 30000
     @b = []
-    # ポインタ
     @p = 0
-    # '[' のレベル
     @x = 0
   end
 
-  # '>' ポインタをインクリメントする
+  # '>'
   def r
     @p += 1 if !@j
   end
 
-  # '<' ポインタをデクリメントする
+  # '<'
   def l
     @p -= 1 if !@j
   end
 
-  # '+' ポインタが指す位置の値をインクリメントする
+  # '+'
   def i
-    @a[ @p ] += 1 if !@j
+    @memory[ @p ] += 1 if !@j
   end
 
-  # '-' ポインタが指す位置の値をデクレメント
+  # '-'
   def d
-    @a[ @p ] -= 1 if !@j
+    @memory[ @p ] -= 1 if !@j
   end
 
-  # '.' ポインタが指す位置の値を出力する
+  # '.'
   def o
-    print @a[ @p ].chr if !@j
+    print @memory[ @p ].chr if !@j
   end
 
-  # ',' 1 バイト入力してポインタが指す位置に書き込む
+  # ','
   def n
-    @a[ @p ] = $stdin.getc if !@j
+    @memory[ @p ] = $stdin.getc if !@j
   end
 
-  # '[' ポインタが指す値が 0 なら、対応する ']' までジャンプする
+  # '['
   def j
     @x += 1
-    @b[ @x ] = $i - 1
+    @b[ @x ] = $ip - 1
     if @j
       return
-    elsif  @a[ @p ] == 0
-      # ']' までのジャンプ開始
+    elsif  @memory[ @p ] == 0
       @j = @x
     end
   end
 
-  # ']' ポインタが指す値が 0 でないなら、対応する '[' までジャンプする
+  # ']'
   def e
     if @j == @x
-      # '[' からのジャンプ終了
       @j = nil
-    elsif @a[ @p ] != 0
-      $i = @b[ @x ]
+    elsif @memory[ @p ] != 0
+      $ip = @b[ @x ]
     end
     @x -= 1
   end
@@ -69,12 +63,11 @@ end
 
 bf = Bf.new
 
-# プログラムカウンタ
-$i = 0
+$ip = 0
 
 p = $<.readlines.join.tr( '^><+\-.,[]', '' ).tr( '><+\-.,[]', 'rlidonje' )
 
-while $i < p.size
-  bf.send p[ $i ].chr
-  $i += 1
+while $ip < p.size
+  bf.send p[ $ip ].chr
+  $ip += 1
 end
