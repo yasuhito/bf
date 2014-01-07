@@ -43,35 +43,56 @@ class Bf
   end
 
   # '['
-  def j
+  def j(ip)
     @x += 1
-    @b[@x] = $ip - 1
+    @b[@x] = ip - 1
     if @j
       return
-    elsif  @memory[@p] == 0
+    elsif @memory[@p] == 0
       @j = @x
     end
   end
 
   # ']'
-  def e
+  def e(ip)
     if @j == @x
       @j = nil
     elsif @memory[@p] != 0
-      $ip = @b[@x]
+      ip = @b[@x]
     end
     @x -= 1
+    ip
   end
 end
 
-bf = Bf.new
+# Runs BrainFuck interpreter
+class BfRunner
+  def initialize
+    @ip = 0
+    @bf = Bf.new
+  end
 
-$ip = 0
+  def run(bf_code)
+    code = alphabet_code(bf_code)
+    while @ip < code.size
+      command = code[@ip].chr
+      case command
+      when 'j'
+        @bf.__send__(command, @ip)
+      when 'e'
+        @ip = @bf.__send__(command, @ip)
+      else
+        @bf.__send__ command
+      end
+      @ip += 1
+    end
+  end
 
-p = $DEFAULT_INPUT.readlines.join
-  .tr('^><+\-.,[]', '').tr('><+\-.,[]', 'rlidonje')
+  private
 
-while $ip < p.size
-  bf.send p[$ip].chr
-  $ip += 1
+  def alphabet_code(code)
+    code.tr('^><+\-.,[]', '').tr('><+\-.,[]', 'rlidonje')
+  end
 end
+
+BfRunner.new.run($DEFAULT_INPUT.readlines.join)

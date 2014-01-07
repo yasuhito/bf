@@ -3,4 +3,4 @@
 # one by one as the offences are removed from the code base.
 
 GlobalVars:
-  Enabled: false
+  Enabled: true
