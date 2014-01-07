@@ -12,32 +12,32 @@ class Bf
 
   # '>'
   def r
-    @p += 1 if !@j
+    @p += 1 unless @j
   end
 
   # '<'
   def l
-    @p -= 1 if !@j
+    @p -= 1 unless @j
   end
 
   # '+'
   def i
-    @memory[ @p ] += 1 if !@j
+    @memory[ @p ] += 1 unless @j
   end
 
   # '-'
   def d
-    @memory[ @p ] -= 1 if !@j
+    @memory[ @p ] -= 1 unless @j
   end
 
   # '.'
   def o
-    print @memory[ @p ].chr if !@j
+    print @memory[ @p ].chr unless @j
   end
 
   # ','
   def n
-    @memory[ @p ] = $stdin.getc if !@j
+    @memory[ @p ] = $stdin.getc unless @j
   end
 
   # '['
