@@ -75,15 +75,7 @@ class BfRunner
   def run(bf_code)
     code = alphabet_code(bf_code)
     while @ip < code.size
-      command = code[@ip].chr
-      case command
-      when 'j'
-        @bf.__send__(command, @ip)
-      when 'e'
-        @ip = @bf.__send__(command, @ip)
-      else
-        @bf.__send__ command
-      end
+      interpret code[@ip].chr
       @ip += 1
     end
   end
@@ -92,6 +84,17 @@ class BfRunner
 
   def alphabet_code(code)
     code.tr('^><+\-.,[]', '').tr('><+\-.,[]', 'rlidonje')
+  end
+
+  def interpret(command)
+    case command
+    when 'j'
+      @bf.__send__(command, @ip)
+    when 'e'
+      @ip = @bf.__send__(command, @ip)
+    else
+      @bf.__send__ command
+    end
   end
 end
 
