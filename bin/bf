@@ -4,7 +4,7 @@
 # BrainFuck interpreter.
 class Bf
   def initialize
-    @memory = [ 0 ] * 30000
+    @memory = [ 0 ] * 30_000
     @b = []
     @p = 0
     @x = 0
