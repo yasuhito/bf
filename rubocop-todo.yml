@@ -5,8 +5,5 @@
 GlobalVars:
   Enabled: false
 
-SpaceInsideParens:
-  Enabled: false
-
 SpecialGlobalVars:
   Enabled: false
