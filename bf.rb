@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class Bf
   def initialize
     # メモリ
@@ -53,11 +54,10 @@ class Bf
   # '[' ポインタが指す値が 0 なら、対応する ']' までジャンプする
   def j
     @x += 1
+    @b[ @x ] = $i - 1
     if @a[ @p ] == 0
       # ']' までのジャンプ開始
       @j = true
-    else
-      @b[ @x ] = $i - 1
     end
   end
 
@@ -67,7 +67,7 @@ class Bf
     if @j
       # '[' からのジャンプ終了
       @j = false
-    else
+    elsif @a[ @p ] != 0
       $i = @b[ @x ]
     end
     @x -= 1
@@ -86,5 +86,3 @@ while $i < p.size
   bf.send p[ $i ].chr
   $i += 1
 end
-
-$stderr << "\n"
