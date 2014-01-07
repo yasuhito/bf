@@ -1,89 +1,101 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 
+require 'English'
+
+# BrainFuck interpreter.
 class Bf
   def initialize
-    # メモリ
-    @a = [ 0 ] * 30000
-    # '[' のあるアドレス - 1
+    @memory = [0] * 30_000
     @b = []
-    # ポインタ
     @p = 0
-    # '[' のレベル
     @x = 0
   end
 
-
-  # '>' ポインタをインクリメントする
+  # '>'
   def r
-    @p += 1 if !@j
+    @p += 1 unless @j
   end
 
-
-  # '<' ポインタをデクリメントする
+  # '<'
   def l
-    @p -= 1 if !@j
+    @p -= 1 unless @j
   end
 
-
-  # '+' ポインタが指す位置の値をインクリメントする
+  # '+'
   def i
-    @a[ @p ] += 1 if !@j
+    @memory[@p] += 1 unless @j
   end
 
-
-  # '-' ポインタが指す位置の値をデクレメント
+  # '-'
   def d
-    @a[ @p ] -= 1 if !@j
+    @memory[@p] -= 1 unless @j
   end
 
-
-  # '.' ポインタが指す位置の値を出力する
+  # '.'
   def o
-    print @a[ @p ].chr if !@j
+    print @memory[@p].chr unless @j
   end
 
-
-  # ',' 1 バイト入力してポインタが指す位置に書き込む
+  # ','
   def n
-    @a[ @p ] = $stdin.getc if !@j
+    @memory[@p] = $stdin.getc unless @j
   end
 
-
-  # '[' ポインタが指す値が 0 なら、対応する ']' までジャンプする
-  def j
+  # '['
+  def j(ip)
     @x += 1
-    @b[ @x ] = $i - 1
+    @b[@x] = ip - 1
     if @j
       return
-    elsif  @a[ @p ] == 0
-      # ']' までのジャンプ開始
+    elsif @memory[@p] == 0
       @j = @x
     end
   end
 
-
-  # ']' ポインタが指す値が 0 でないなら、対応する '[' までジャンプする
-  def e
+  # ']'
+  def e(ip)
     if @j == @x
-      # '[' からのジャンプ終了
       @j = nil
-    elsif @a[ @p ] != 0
-      $i = @b[ @x ]
+    elsif @memory[@p] != 0
+      ip = @b[@x]
     end
     @x -= 1
+    ip
   end
 end
 
+# Runs BrainFuck interpreter
+class BfRunner
+  def initialize
+    @ip = 0
+    @bf = Bf.new
+  end
 
-bf = Bf.new
+  def run(bf_code)
+    code = alphabet_code(bf_code)
+    while @ip < code.size
+      interpret code[@ip].chr
+      @ip += 1
+    end
+  end
 
-# プログラムカウンタ
-$i = 0
+  private
 
-p = $<.readlines.join.tr( '^><+\-.,[]', '' ).tr( '><+\-.,[]', 'rlidonje' )
+  def alphabet_code(code)
+    code.tr('^><+\-.,[]', '').tr('><+\-.,[]', 'rlidonje')
+  end
 
-while $i < p.size
-  bf.send p[ $i ].chr
-  $i += 1
+  def interpret(command)
+    case command
+    when 'j'
+      @bf.__send__(command, @ip)
+    when 'e'
+      @ip = @bf.__send__(command, @ip)
+    else
+      @bf.__send__ command
+    end
+  end
 end
+
+BfRunner.new.run($DEFAULT_INPUT.readlines.join)
