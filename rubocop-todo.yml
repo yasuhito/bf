@@ -8,9 +8,6 @@ AsciiComments:
 Documentation:
   Enabled: false
 
-EmptyLines:
-  Enabled: false
-
 FavorUnlessOverNegatedIf:
   Enabled: false
 
