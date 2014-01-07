@@ -1,4 +1,6 @@
+#!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
+
 class Bf
   def initialize
     # メモリ
@@ -10,9 +12,6 @@ class Bf
     # '[' のレベル
     @x = 0
   end
-
-
-  # [NOTE] @j == true (ジャンプ中) である場合、']' 以外の命令は無視される。
 
 
   # '>' ポインタをインクリメントする
@@ -55,18 +54,20 @@ class Bf
   def j
     @x += 1
     @b[ @x ] = $i - 1
-    if @a[ @p ] == 0
+    if @j
+      return
+    elsif  @a[ @p ] == 0
       # ']' までのジャンプ開始
-      @j = true
+      @j = @x
     end
   end
 
 
   # ']' ポインタが指す値が 0 でないなら、対応する '[' までジャンプする
   def e
-    if @j
+    if @j == @x
       # '[' からのジャンプ終了
-      @j = false
+      @j = nil
     elsif @a[ @p ] != 0
       $i = @b[ @x ]
     end
