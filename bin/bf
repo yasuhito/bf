@@ -15,20 +15,25 @@ class Bf
     ']' => :jump_back,
   }
 
-  def initialize
-    @ip = 0
-    @pointer = 0
-    @memory = Array.new(30_000, 0)
-    @jump_start_ip = []
-    @jump = nil
-  end
-
   def run(user_input)
-    code = user_input.tr('^><+\-.,[]', '')
+    init
+    code = user_input.tr('^' + valid_commands.join, '')
     read(code[@ip].chr) while @ip < code.size
   end
 
   private
+
+  def init
+    @ip = 0
+    @pointer = 0
+    @cells = Array.new(30_000, 0)
+    @jump_ip_stack = []
+    @jump = nil
+  end
+
+  def valid_commands
+    METHODS.keys
+  end
 
   def read(command)
     method = METHODS[command]
@@ -45,35 +50,31 @@ class Bf
   end
 
   def increment
-    @memory[@pointer] += 1
+    @cells[@pointer] += 1
   end
 
   def decrement
-    @memory[@pointer] -= 1
+    @cells[@pointer] -= 1
   end
 
   def output
-    print @memory[@pointer].chr
+    print @cells[@pointer].chr
   end
 
   def input
-    @memory[@pointer] = $stdin.getc
+    @cells[@pointer] = $stdin.getc
   end
 
   def jump
-    @jump_start_ip << @ip - 1
+    @jump_ip_stack << @ip - 1
     return if @jump
-    @jump = jump_nesting_level if @memory[@pointer] == 0
+    @jump = @jump_ip_stack.size if @cells[@pointer] == 0
   end
 
   def jump_back
-    @jump = nil if @jump == jump_nesting_level
-    ip = @jump_start_ip.pop
-    @ip = ip if @memory[@pointer] != 0
-  end
-
-  def jump_nesting_level
-    @jump_start_ip.size
+    @jump = nil if @jump == @jump_ip_stack.size
+    ip = @jump_ip_stack.pop
+    @ip = ip if @cells[@pointer] != 0
   end
 end
 
