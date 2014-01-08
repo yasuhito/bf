@@ -32,33 +32,32 @@ class Bf
 
   def read(command)
     method = METHODS[command]
-    return unless method
-    __send__ method
+    __send__(method) if method =~ /^jump/ || !(method =~ /^jump/) && !@jump
     @ip += 1
   end
 
   def right
-    @pointer += 1 unless @jump
+    @pointer += 1
   end
 
   def left
-    @pointer -= 1 unless @jump
+    @pointer -= 1
   end
 
   def increment
-    @memory[@pointer] += 1 unless @jump
+    @memory[@pointer] += 1
   end
 
   def decrement
-    @memory[@pointer] -= 1 unless @jump
+    @memory[@pointer] -= 1
   end
 
   def output
-    print @memory[@pointer].chr unless @jump
+    print @memory[@pointer].chr
   end
 
   def input
-    @memory[@pointer] = $stdin.getc unless @jump
+    @memory[@pointer] = $stdin.getc
   end
 
   def jump
